@@ -35,7 +35,7 @@ def main
 
   CSV.open("#{@file}", "w") do |csv|
     #write header row to CSV object
-    csv << ["collector_id","hostname","display_name","group_list","description","properties"]
+    csv << ["collector_id","hostname","display_name","group_list","description","properties","sysinfo"] # Bennett - added sysinfo
     hosts_response = rpc("getHosts",{"hostGroupId"=>GLOBAL_GROUP_ID})
     hosts_json = JSON.parse(hosts_response)
     host_list = hosts_json["data"]["hosts"]
@@ -52,7 +52,7 @@ def main
           properties << prop_hash["name"] + "=" + prop_hash["value"]
         end
       end
-      csv << [host["agentId"], host["hostName"], host["displayedAs"], host["properties"]["system.groups"].gsub(",",":"), host["description"], properties]
+      csv << [host["agentId"], host["hostName"], host["displayedAs"], host["properties"]["system.groups"].gsub(",",":"), host["description"], properties, host["properties"]["system.sysinfo"]] # Bennett - added sysinfo
     end
 
   end
